@@ -15,7 +15,7 @@ export class ApiKeyGuard implements CanActivate {
   private readonly apiKey: string
 
   constructor() {
-    this.apiKey = envs.API_KEY || ""
+    this.apiKey = envs.API_KEY?.trim() || ""
 
     if (!this.apiKey) {
       this.logger.warn(
@@ -31,12 +31,7 @@ export class ApiKeyGuard implements CanActivate {
     }>()
     const apiKeyHeader = request.headers["x-api-key"]
 
-    if (!this.apiKey) {
-      this.logger.warn("API Key no configurada, acceso permitido por defecto (INSEGURO)")
-      return true
-    }
-
-    if (!apiKeyHeader) {
+    if (!apiKeyHeader || !this.apiKey) {
       this.logger.warn(`Intento de acceso sin API Key desde ${request.ip ?? "IP desconocida"}`)
       throw new CustomError(EnumError401.ApiKeyFaltante)
     }
