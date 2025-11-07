@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: davivienda_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-billetera_virtual}
+      MYSQL_USER: ${MYSQL_USER:-billeterauser}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-billeterapass}
+    ports:
+      - "33060:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - davivienda-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    container_name: davivienda_phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: ${MYSQL_USER:-billeterauser}
+      PMA_PASSWORD: ${MYSQL_PASSWORD:-billeterapass}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+    ports:
+      - "8081:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - davivienda-network
+
+  servidor-database:
+    build:
+      context: ./servidor-database
+      dockerfile: Dockerfile
+    container_name: davivienda_servidor_database
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: dev
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: ${MYSQL_USER:-billeterauser}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-billeterapass}
+      DB_DATABASE_NAME: ${MYSQL_DATABASE:-billetera_virtual}
+    volumes:
+      - ./servidor-database:/app
+      - /app/node_modules
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - davivienda-network
+
+  servidor-client:
+    build:
+      context: ./servidor-client
+      dockerfile: Dockerfile
+    container_name: davivienda_servidor_client
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: dev
+      DATABASE_SERVER_URL: http://servidor-database:3000
+      DATABASE_SERVER_API_KEY: super-secret-api-key-change-in-production-123456
+    volumes:
+      - ./servidor-client:/app
+      - /app/node_modules
+    depends_on:
+      - servidor-database
+    networks:
+      - davivienda-network
+
+  cliente-app:
+    build:
+      context: ./cliente-app
+      dockerfile: Dockerfile
+    container_name: davivienda_cliente_app
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE_URL: http://localhost:3001
+      VITE_API_KEY: client-api-key-2025
+    volumes:
+      - ./cliente-app:/app
+      - /app/node_modules
+    depends_on:
+      - servidor-client
+    networks:
+      - davivienda-network
+
+networks:
+  davivienda-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
