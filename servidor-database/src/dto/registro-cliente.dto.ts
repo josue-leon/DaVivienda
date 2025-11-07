@@ -1,16 +1,16 @@
-import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator"
+import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength, Matches } from "class-validator"
 
 import { ApiProperty } from "@nestjs/swagger"
+import { IsDocumentoColombia } from "../validators/documento-colombia.validator"
 
 export class RegistroClienteDto {
   @ApiProperty({
-    description: "Número de documento de identidad del cliente",
-    example: "12345678"
+    description: "Número de documento de identidad del cliente (cédula colombiana)",
+    example: "1234567890"
   })
   @IsString()
   @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(20)
+  @IsDocumentoColombia()
   documento: string
 
   @ApiProperty({
@@ -32,12 +32,11 @@ export class RegistroClienteDto {
   email: string
 
   @ApiProperty({
-    description: "Número de teléfono celular del cliente",
+    description: "Número de teléfono celular del cliente (10 dígitos)",
     example: "3001234567"
   })
   @IsString()
   @IsNotEmpty()
-  @MinLength(10)
-  @MaxLength(15)
+  @Matches(/^\d{10}$/, { message: 'El celular debe tener exactamente 10 dígitos' })
   celular: string
 }

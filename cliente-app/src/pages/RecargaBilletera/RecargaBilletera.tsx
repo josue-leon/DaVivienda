@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Input, Button } from '../../components/common';
+import { Card, Input, Button, DocumentoInput, CelularInput, validarDocumentoColombia } from '../../components/common';
 import { useNotification } from '../../contexts/NotificationContext';
 import { billeteraService } from '../../api/billetera.service';
 import '../Home/FormPage.css';
@@ -32,6 +32,10 @@ export function RecargaBilletera() {
       newErrors.documento = 'El documento es requerido';
     } else if (!/^\d+$/.test(formData.documento)) {
       newErrors.documento = 'El documento debe contener solo números';
+    } else if (formData.documento.length < 6 || formData.documento.length > 10) {
+      newErrors.documento = 'El documento debe tener entre 6 y 10 dígitos';
+    } else if (!validarDocumentoColombia(formData.documento)) {
+      newErrors.documento = 'El documento no es válido';
     }
 
     if (!formData.celular.trim()) {
@@ -108,26 +112,27 @@ export function RecargaBilletera() {
           Ingresa tu documento, celular y el monto a recargar en tu billetera virtual
         </p>
         <form onSubmit={handleSubmit} className="form">
-          <Input
-            label="Documento de Identidad"
-            name="documento"
-            type="text"
-            placeholder="Ej: 12345678"
+          <DocumentoInput
             value={formData.documento}
-            onChange={handleChange}
+            onChange={(value) => {
+              setFormData((prev) => ({ ...prev, documento: value }));
+              if (errors.documento) {
+                setErrors((prev) => ({ ...prev, documento: '' }));
+              }
+            }}
             error={errors.documento}
             required
             disabled={loading}
           />
-          <Input
-            label="Celular"
-            name="celular"
-            type="tel"
-            placeholder="Ej: 3001234567"
+          <CelularInput
             value={formData.celular}
-            onChange={handleChange}
+            onChange={(value) => {
+              setFormData((prev) => ({ ...prev, celular: value }));
+              if (errors.celular) {
+                setErrors((prev) => ({ ...prev, celular: '' }));
+              }
+            }}
             error={errors.celular}
-            helperText="10 dígitos sin espacios"
             required
             disabled={loading}
           />

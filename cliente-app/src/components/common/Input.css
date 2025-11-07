@@ -16,6 +16,29 @@
   margin-left: 4px;
 }
 
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+.input-with-prefix {
+  display: flex;
+  align-items: center;
+}
+
+.input-prefix {
+  position: absolute;
+  left: 16px;
+  font-size: 16px;
+  color: #6b7280;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.input-with-prefix .input {
+  padding-left: 50px;
+}
+
 .input {
   width: 100%;
   padding: 12px 16px;

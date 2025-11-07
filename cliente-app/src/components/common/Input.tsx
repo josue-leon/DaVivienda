@@ -6,10 +6,11 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   helperText?: string;
+  prefix?: string;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, helperText, className = '', ...props }, ref) => {
+  ({ label, error, helperText, prefix, className = '', ...props }, ref) => {
     return (
       <div className="input-wrapper">
         {label && (
@@ -18,7 +19,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {props.required && <span className="input-required">*</span>}
           </label>
         )}
-        <input ref={ref} className={`input ${error ? 'input-error' : ''} ${className}`} {...props} />
+        <div className={`input-container ${prefix ? 'input-with-prefix' : ''}`}>
+          {prefix && <span className="input-prefix">{prefix}</span>}
+          <input ref={ref} className={`input ${error ? 'input-error' : ''} ${className}`} {...props} />
+        </div>
         {error && <span className="input-error-message">{error}</span>}
         {helperText && !error && <span className="input-helper-text">{helperText}</span>}
       </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Card, Input, Button } from '../../components/common';
+import { Card, Button, DocumentoInput, CelularInput, validarDocumentoColombia } from '../../components/common';
 import { useNotification } from '../../contexts/NotificationContext';
 import { billeteraService } from '../../api/billetera.service';
 import '../Home/FormPage.css';
@@ -17,14 +17,6 @@ export function ConsultarSaldo() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [resultado, setResultado] = useState<SaldoResponseEntity | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
-  };
-
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
@@ -32,6 +24,10 @@ export function ConsultarSaldo() {
       newErrors.documento = 'El documento es requerido';
     } else if (!/^\d+$/.test(formData.documento)) {
       newErrors.documento = 'El documento debe contener solo números';
+    } else if (formData.documento.length < 6 || formData.documento.length > 10) {
+      newErrors.documento = 'El documento debe tener entre 6 y 10 dígitos';
+    } else if (!validarDocumentoColombia(formData.documento)) {
+      newErrors.documento = 'El documento no es válido';
     }
 
     if (!formData.celular.trim()) {
@@ -92,26 +88,27 @@ export function ConsultarSaldo() {
       <Card title="Consultar Saldo">
         <p className="form-description">Ingresa tu documento y celular para consultar tu saldo disponible</p>
         <form onSubmit={handleSubmit} className="form">
-          <Input
-            label="Documento de Identidad"
-            name="documento"
-            type="text"
-            placeholder="Ej: 12345678"
+          <DocumentoInput
             value={formData.documento}
-            onChange={handleChange}
+            onChange={(value) => {
+              setFormData((prev) => ({ ...prev, documento: value }));
+              if (errors.documento) {
+                setErrors((prev) => ({ ...prev, documento: '' }));
+              }
+            }}
             error={errors.documento}
             required
             disabled={loading}
           />
-          <Input
-            label="Celular"
-            name="celular"
-            type="tel"
-            placeholder="Ej: 3001234567"
+          <CelularInput
             value={formData.celular}
-            onChange={handleChange}
+            onChange={(value) => {
+              setFormData((prev) => ({ ...prev, celular: value }));
+              if (errors.celular) {
+                setErrors((prev) => ({ ...prev, celular: '' }));
+              }
+            }}
             error={errors.celular}
-            helperText="10 dígitos sin espacios"
             required
             disabled={loading}
           />
