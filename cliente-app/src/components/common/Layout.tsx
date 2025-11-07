@@ -13,7 +13,7 @@ export function Layout({ children }: LayoutProps) {
   const navItems = [
     { path: '/', label: 'Inicio' },
     { path: '/registro', label: 'Registrar Cliente' },
-    { path: '/registros', label: 'Ver Registros' },
+    { path: '/clientes', label: 'Ver Registros' },
     { path: '/recarga', label: 'Recargar Billetera' },
     { path: '/pagar', label: 'Realizar Pago' },
     { path: '/consultar-saldo', label: 'Consultar Saldo' },
