@@ -9,8 +9,17 @@
   "moduleNameMapper": {
     "^src/(.*)$": "<rootDir>/../src/$1",
     "^schema-api/(.*)$": "<rootDir>/../schema-api/$1",
-    "^prisma/(.*)$": "<rootDir>/../prisma/$1",
     "^utils/(.*)$": "<rootDir>/../utils/$1",
     "^envs$": "<rootDir>/../envs.ts"
-  }
+  },
+  "reporters": [
+    "default",
+    [
+      "../node_modules/jest-html-reporter",
+      {
+        "pageTitle": "Test Report",
+        "outputPath": "./jest-report/report-e2e.html"
+      }
+    ]
+  ]
 }
