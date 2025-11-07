@@ -47,6 +47,12 @@ export class ClienteService {
     this.logger.log(`✅ Cliente registrado exitosamente: ${nuevoCliente.id}`)
 
     // Enviar email de bienvenida (no bloqueante)
+    this.emailService
+      .enviarEmailBienvenida(nuevoCliente.email, nuevoCliente.nombres)
+      .catch((error) => {
+        const errorMessage = error instanceof Error ? error.message : "Error desconocido"
+        this.logger.warn(`No se pudo enviar email de bienvenida: ${errorMessage}`)
+      })
 
     return nuevoCliente
   }

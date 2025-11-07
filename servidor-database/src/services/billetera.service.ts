@@ -7,6 +7,7 @@ import { RecargaBilleteraDto } from "src/dto/recarga-billetera.dto"
 import { ClienteRepository } from "src/repositories/clienteRepository"
 import { SesionCompraRepository } from "src/repositories/sesionCompraRepository"
 import { TransaccionRepository } from "src/repositories/transaccionRepository"
+import { calcularExpiracion, estaExpirado, generarTokenNumerico } from "src/utils/token.utils"
 
 import { Injectable, Logger } from "@nestjs/common"
 
@@ -37,6 +38,7 @@ export class BilleteraService {
   async recargarBilletera(dto: RecargaBilleteraDto) {
     this.logger.log(`Recarga solicitada - Documento: ${dto.documento}, Monto: ${dto.monto}`)
 
+    // Validar que el cliente exista con documento y celular
     const cliente = await this.clienteRepository.findByDocumentoAndCelular(
       dto.documento,
       dto.celular
@@ -47,6 +49,7 @@ export class BilleteraService {
       throw new CustomError(EnumError400.ClienteDocumentoCelularNoCoinciden)
     }
 
+    // Validar monto positivo
     if (dto.monto <= 0) {
       throw new CustomError(EnumError400.MontoInvalido)
     }
@@ -54,9 +57,12 @@ export class BilleteraService {
     const montoDecimal = new Decimal(dto.monto)
     const saldoAnterior = cliente.saldo.toString()
 
+    // Ejecutar incremento de saldo y registro de transacción en una transacción atómica
     const clienteActualizado = await this.unitOfWork.runInTransaction(async () => {
+      // Incrementar saldo
       const clienteUpdated = await this.clienteRepository.incrementarSaldo(cliente.id, montoDecimal)
 
+      // Registrar transacción
       await this.transaccionRepository.create({
         clienteId: cliente.id,
         tipo: TipoTransaccion.RECARGA,
@@ -88,6 +94,7 @@ export class BilleteraService {
   async iniciarPago(dto: PagarDto) {
     this.logger.log(`Pago solicitado - Documento: ${dto.documento}, Monto: ${dto.monto}`)
 
+    // Validar que el cliente exista
     const cliente = await this.clienteRepository.findByDocumentoAndCelular(
       dto.documento,
       dto.celular
@@ -98,6 +105,7 @@ export class BilleteraService {
       throw new CustomError(EnumError400.ClienteDocumentoCelularNoCoinciden)
     }
 
+    // Validar monto positivo
     if (dto.monto <= 0) {
       throw new CustomError(EnumError400.MontoInvalido)
     }
@@ -105,6 +113,7 @@ export class BilleteraService {
     const montoDecimal = new Decimal(dto.monto)
     const saldoActual = new Decimal(cliente.saldo.toString())
 
+    // Validar saldo suficiente
     if (saldoActual.lessThan(montoDecimal)) {
       this.logger.warn(
         `Saldo insuficiente - Cliente: ${cliente.id}, Saldo: ${saldoActual.toString()}, Monto: ${montoDecimal.toString()}`
@@ -113,23 +122,31 @@ export class BilleteraService {
     }
 
     // Generar token de 6 dígitos
+    const token = generarTokenNumerico()
 
     // Calcular expiración (15 minutos por defecto)
     const expiracionMinutos = envs.TOKEN_EXPIRATION_MINUTES
+    const expiraEn = calcularExpiracion(expiracionMinutos)
 
     // Crear sesión de compra
     const sesion = await this.sesionCompraRepository.create({
       clienteId: cliente.id,
       monto: montoDecimal,
-      token: "123456",
-      expiraEn: new Date()
+      token,
+      expiraEn
     })
 
-    this.logger.log(`✅ Sesión de pago creada - ID: ${sesion.id}, Token: ${"123456"}`)
+    this.logger.log(`✅ Sesión de pago creada - ID: ${sesion.id}, Token: ${token}`)
 
     // Enviar email con el token
     try {
-      // enviar a correo
+      await this.emailService.enviarTokenPago(
+        cliente.email,
+        cliente.nombres,
+        token,
+        dto.monto,
+        sesion.id
+      )
     } catch (emailError) {
       const errorMessage = emailError instanceof Error ? emailError.message : "Error desconocido"
       this.logger.error(`Error al enviar email: ${errorMessage}`)
@@ -152,6 +169,7 @@ export class BilleteraService {
   async confirmarPago(dto: ConfirmarPagoDto) {
     this.logger.log(`Confirmación de pago - Sesión: ${dto.id_sesion}`)
 
+    // Buscar la sesión de compra
     const sesion = await this.sesionCompraRepository.validateToken(dto.id_sesion, dto.token)
 
     if (!sesion) {
@@ -159,12 +177,14 @@ export class BilleteraService {
       throw new CustomError(EnumError400.TokenInvalido)
     }
 
+    // Verificar si ya fue usada
     if (sesion.usado) {
       this.logger.warn(`Token ya usado: ${dto.id_sesion}`)
       throw new CustomError(EnumError400.SesionYaUsada)
     }
 
-    if (false) {
+    // Verificar si expiró
+    if (estaExpirado(sesion.expiraEn)) {
       this.logger.warn(`Token expirado: ${dto.id_sesion}`)
       throw new CustomError(EnumError400.SesionExpirada)
     }
@@ -177,6 +197,7 @@ export class BilleteraService {
       throw new CustomError(EnumError400.SaldoInsuficiente)
     }
 
+    // Ejecutar todas las operaciones en una transacción atómica
     const clienteActualizado = await this.unitOfWork.runInTransaction(async () => {
       // Decrementar saldo
       const cliente = await this.clienteRepository.decrementarSaldo(sesion.clienteId, montoPago)
@@ -217,6 +238,7 @@ export class BilleteraService {
   async consultarSaldo(dto: ConsultarSaldoDto) {
     this.logger.log(`Consulta de saldo - Documento: ${dto.documento}`)
 
+    // Buscar cliente con validación de documento y celular
     const cliente = await this.clienteRepository.findByDocumentoAndCelular(
       dto.documento,
       dto.celular
