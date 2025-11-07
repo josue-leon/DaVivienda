@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Input, Button } from '../components/common';
-import { useNotification } from '../contexts/NotificationContext';
-import { billeteraService } from '../api/billetera.service';
-import './FormPage.css';
+import { Card, Input, Button } from '../../components/common';
+import { useNotification } from '../../contexts/NotificationContext';
+import { billeteraService } from '../../api/billetera.service';
+import '../Home/FormPage.css';
 import './Pagar.css';
 
 type Step = 'iniciar' | 'confirmar';

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { Card, Input, Button } from '../components/common';
-import { useNotification } from '../contexts/NotificationContext';
-import { billeteraService } from '../api/billetera.service';
-import './FormPage.css';
+import { Card, Input, Button } from '../../components/common';
+import { useNotification } from '../../contexts/NotificationContext';
+import { billeteraService } from '../../api/billetera.service';
+import '../Home/FormPage.css';
 import './ConsultarSaldo.css';
-import type { SaldoResponseEntity } from '../../api-client';
+import type { SaldoResponseEntity } from '../../../api-client';
 
 export function ConsultarSaldo() {
   const { showNotification } = useNotification();

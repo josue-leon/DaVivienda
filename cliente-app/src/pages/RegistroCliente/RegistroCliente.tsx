@@ -1,25 +1,27 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Input, Button } from '../components/common';
-import { useNotification } from '../contexts/NotificationContext';
-import { billeteraService } from '../api/billetera.service';
-import './FormPage.css';
+import { Card, Input, Button } from '../../components/common';
+import { useNotification } from '../../contexts/NotificationContext';
+import '../Home/FormPage.css';
+import { clienteService } from '../../api/cliente.service';
 
-export function RecargaBilletera() {
+export function RegistroCliente() {
   const navigate = useNavigate();
   const { showNotification } = useNotification();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     documento: '',
+    nombres: '',
+    email: '',
     celular: '',
-    monto: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Limpiar error del campo al escribir
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
@@ -34,19 +36,22 @@ export function RecargaBilletera() {
       newErrors.documento = 'El documento debe contener solo números';
     }
 
+    if (!formData.nombres.trim()) {
+      newErrors.nombres = 'El nombre es requerido';
+    } else if (formData.nombres.trim().length < 3) {
+      newErrors.nombres = 'El nombre debe tener al menos 3 caracteres';
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'El email es requerido';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'El email no es válido';
+    }
+
     if (!formData.celular.trim()) {
       newErrors.celular = 'El celular es requerido';
     } else if (!/^\d{10}$/.test(formData.celular)) {
       newErrors.celular = 'El celular debe tener 10 dígitos';
-    }
-
-    if (!formData.monto.trim()) {
-      newErrors.monto = 'El monto es requerido';
-    } else {
-      const montoNum = parseFloat(formData.monto);
-      if (isNaN(montoNum) || montoNum <= 0) {
-        newErrors.monto = 'El monto debe ser mayor a 0';
-      }
     }
 
     setErrors(newErrors);
@@ -64,30 +69,23 @@ export function RecargaBilletera() {
     setLoading(true);
 
     try {
-      const result = await billeteraService.recargar({
-        documento: formData.documento,
-        celular: formData.celular,
-        monto: parseFloat(formData.monto),
-      });
+      const result = await clienteService.registrar(formData);
+      showNotification('success', `Cliente registrado exitosamente. Saldo inicial: $${result.saldo}`, 'Registro Exitoso');
 
-      showNotification(
-        'success',
-        `Recarga exitosa de $${result.montoRecargado}. Nuevo saldo: $${result.saldoNuevo}`,
-        'Recarga Exitosa'
-      );
-
-      setFormData({ documento: '', celular: '', monto: '' });
+      setFormData({ documento: '', nombres: '', email: '', celular: '' });
 
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      
+
       navigate('/');
     } catch (error: any) {
+      // Manejar errores de axios del cliente generado
       const apiError = error.response?.data || error;
-      const errorMessage = apiError.message || 'Error al recargar la billetera';
+      const errorMessage = apiError.message || 'Error al registrar el cliente';
       const errorTitle = apiError.title || 'Error';
 
       showNotification('error', errorMessage, errorTitle);
 
+      // Si hay validaciones, mapearlas a errores de campos
       if (apiError.validations) {
         const fieldErrors: Record<string, string> = {};
         apiError.validations.forEach((validation: any) => {
@@ -103,9 +101,9 @@ export function RecargaBilletera() {
 
   return (
     <div className="form-page">
-      <Card title="Recargar Billetera">
+      <Card title="Registrar Nuevo Cliente">
         <p className="form-description">
-          Ingresa tu documento, celular y el monto a recargar en tu billetera virtual
+          Completa el formulario para crear una cuenta en la billetera virtual de Davivienda
         </p>
         <form onSubmit={handleSubmit} className="form">
           <Input
@@ -116,6 +114,28 @@ export function RecargaBilletera() {
             value={formData.documento}
             onChange={handleChange}
             error={errors.documento}
+            required
+            disabled={loading}
+          />
+          <Input
+            label="Nombres Completos"
+            name="nombres"
+            type="text"
+            placeholder="Ej: Juan Pérez"
+            value={formData.nombres}
+            onChange={handleChange}
+            error={errors.nombres}
+            required
+            disabled={loading}
+          />
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="Ej: juan@email.com"
+            value={formData.email}
+            onChange={handleChange}
+            error={errors.email}
             required
             disabled={loading}
           />
@@ -131,24 +151,12 @@ export function RecargaBilletera() {
             required
             disabled={loading}
           />
-          <Input
-            label="Monto a Recargar"
-            name="monto"
-            type="number"
-            step="0.01"
-            placeholder="Ej: 50000"
-            value={formData.monto}
-            onChange={handleChange}
-            error={errors.monto}
-            required
-            disabled={loading}
-          />
           <div className="form-actions">
             <Button type="button" variant="outline" onClick={() => navigate('/')} disabled={loading}>
               Cancelar
             </Button>
             <Button type="submit" loading={loading}>
-              Recargar
+              Registrar Cliente
             </Button>
           </div>
         </form>

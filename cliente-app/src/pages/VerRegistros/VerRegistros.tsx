@@ -3,10 +3,10 @@ import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import { Box, Paper, Typography, CircularProgress, TextField, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import { useNotification } from '../contexts/NotificationContext';
+import { useNotification } from '../../contexts/NotificationContext';
 import './VerRegistros.css';
-import { clienteService } from '../api/cliente.service';
-import type { ClienteResponseEntity } from '../../api-client';
+import { clienteService } from '../../api/cliente.service';
+import type { ClienteResponseEntity } from '../../../api-client';
 
 export function VerRegistros() {
   const { showNotification } = useNotification();

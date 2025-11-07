@@ -3,12 +3,12 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { Layout, NotificationContainer } from './components/common';
-import { Home } from './pages/Home';
-import { RegistroCliente } from './pages/RegistroCliente';
-import { VerRegistros } from './pages/VerRegistros';
-import { RecargaBilletera } from './pages/RecargaBilletera';
-import { ConsultarSaldo } from './pages/ConsultarSaldo';
-import { Pagar } from './pages/Pagar';
+import { Home } from './pages/Home/Home';
+import { RegistroCliente } from './pages/RegistroCliente/RegistroCliente';
+import { VerRegistros } from './pages/VerRegistros/VerRegistros';
+import { RecargaBilletera } from './pages/RecargaBilletera/RecargaBilletera';
+import { ConsultarSaldo } from './pages/ConsultarSaldo/ConsultarSaldo';
+import { Pagar } from './pages/Pagar/Pagar';
 import './App.css';
 
 const theme = createTheme({

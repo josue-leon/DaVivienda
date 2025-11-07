@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Card } from '../components/common';
-import logoSmall from '../assets/logoSmallDavivienda.png';
+import { Card } from '../../components/common';
+import logoSmall from '../../assets/logoSmallDavivienda.png';
 import './Home.css';
 
 export function Home() {
