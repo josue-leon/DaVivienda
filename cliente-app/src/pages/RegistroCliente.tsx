@@ -72,13 +72,11 @@ export function RegistroCliente() {
       const result = await clienteService.registrar(formData);
       showNotification('success', `Cliente registrado exitosamente. Saldo inicial: $${result.saldo}`, 'Registro Exitoso');
 
-      // Limpiar formulario
       setFormData({ documento: '', nombres: '', email: '', celular: '' });
 
-      // Redirigir después de 2 segundos
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      navigate('/');
     } catch (error: any) {
       // Manejar errores de axios del cliente generado
       const apiError = error.response?.data || error;
