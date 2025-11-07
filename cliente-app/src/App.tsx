@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { NotificationProvider } from './contexts/NotificationContext';
+import { Layout, NotificationContainer } from './components/common';
+import { Home } from './pages/Home';
+import { RegistroCliente } from './pages/RegistroCliente';
+import { VerRegistros } from './pages/VerRegistros';
+import { RecargaBilletera } from './pages/RecargaBilletera';
+import { ConsultarSaldo } from './pages/ConsultarSaldo';
+import { Pagar } from './pages/Pagar';
+import './App.css';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#C8102E',
+      dark: '#a00d25',
+      light: '#e61339',
+    },
+  },
+});
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <NotificationProvider>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/registro" element={<RegistroCliente />} />
+              <Route path="/registros" element={<VerRegistros />} />
+              <Route path="/recarga" element={<RecargaBilletera />} />
+              <Route path="/consultar-saldo" element={<ConsultarSaldo />} />
+              <Route path="/pagar" element={<Pagar />} />
+            </Routes>
+          </Layout>
+          <NotificationContainer />
+        </NotificationProvider>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
