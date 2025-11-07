@@ -3,6 +3,26 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "builder": "tsc",
+    "assets": [
+      {
+        "include": "../prisma/prisma-client",
+        "outDir": "dist/prisma"
+      },
+      {
+        "include": "../.env",
+        "outDir": "dist/.env"
+      }
+    ],
+    "watchAssets": true,
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "introspectComments": true
+        }
+      }
+    ]
   }
 }

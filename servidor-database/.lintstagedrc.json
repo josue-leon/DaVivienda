@@ -1,0 +1,7 @@
+{
+  "src/**/*.{ts,tsx}": ["npx prettier --write", "npx eslint --fix"],
+  "test/**/*.{ts,tsx}": ["npx prettier --write", "npx eslint --fix"],
+  "utils/**/*.{ts,tsx}": ["npx prettier --write"],
+  "schema-api/**/*.{ts,tsx}": ["npx prettier --write"],
+  "prisma/**/*.{ts,tsx}": ["npx prettier --write", "npx eslint --fix"]
+}
