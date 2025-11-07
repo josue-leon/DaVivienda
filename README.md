@@ -6,6 +6,14 @@
 
 ## 🚀 Inicio Rápido con Docker
 
+```bash
+🚨 IMPORTANTE
+
+Antes de desplegar, renombrar los archivos:
+
+.env.example >> .env
+```
+
 **Iniciar:**
 ```bash
 docker-compose up -d
