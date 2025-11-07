@@ -65,7 +65,7 @@ export class BilleteraController {
     name: "documento",
     required: true,
     description: "Número de documento del cliente",
-    example: "12345678"
+    example: "1134854312"
   })
   @ApiQuery({
     name: "celular",

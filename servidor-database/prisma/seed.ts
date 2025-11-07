@@ -18,7 +18,7 @@ async function main() {
   const clientes = await Promise.all([
     prisma.cliente.create({
       data: {
-        documento: "1234567890",
+        documento: "1134854312",
         nombres: "Juan Pérez García",
         email: "juan.perez@example.com",
         celular: "3001234567",
@@ -201,7 +201,7 @@ async function main() {
 
   console.log("\n✅ Seed completado exitosamente!")
   console.log("\n💡 Puedes usar estos datos para probar la API:")
-  console.log("   - Documento: 1234567890, Celular: 3001234567 (Juan)")
+  console.log("   - Documento: 1134854312, Celular: 3001234567 (Juan)")
   console.log("   - Documento: 9876543210, Celular: 3009876543 (María)")
   console.log("   - Documento: 9988776655, Celular: 3199887766 (Luis - sin saldo)")
 }

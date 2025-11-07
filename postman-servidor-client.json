@@ -1,0 +1,608 @@
+{
+	"info": {
+		"_postman_id": "fc564efd-6008-4627-a7d2-d6eeb96d41b4",
+		"name": "Billetera Virtual - Servidor Client",
+		"description": "API REST que actúa como puente entre el cliente web y el servidor-database",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41940436",
+		"_collection_link": "https://josue9.postman.co/workspace/0e836101-c76b-4a07-b95f-8911ffd541d1/collection/41940436-fc564efd-6008-4627-a7d2-d6eeb96d41b4?action=share&source=collection_link&creator=41940436"
+	},
+	"item": [
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "v1",
+					"item": [
+						{
+							"name": "clientes",
+							"item": [
+								{
+									"name": "registro",
+									"item": [
+										{
+											"name": "Registrar un nuevo cliente",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"documento\": \"1134854312\",\n  \"nombres\": \"Juan Pérez García\",\n  \"email\": \"juan.perez@example.com\",\n  \"celular\": \"3001234567\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/clientes/registro",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"clientes",
+														"registro"
+													]
+												},
+												"description": "Registra un nuevo cliente en la billetera virtual mediante el servidor-database. El documento y email deben ser únicos. Saldo inicial: 0."
+											},
+											"response": [
+												{
+													"name": "Untitled Response",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"documento\": \"1134854312\",\n  \"nombres\": \"Juan Pérez García\",\n  \"email\": \"juan.perez@example.com\",\n  \"celular\": \"3001234567\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/api/v1/clientes/registro",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"clientes",
+																"registro"
+															]
+														}
+													},
+													"status": "Created",
+													"code": 201,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"id\": 1,\n  \"documento\": \"1134854312\",\n  \"nombres\": \"Juan Pérez García\",\n  \"email\": \"juan.perez@example.com\",\n  \"celular\": \"3001234567\",\n  \"saldo\": \"0\",\n  \"createdAt\": \"2025-11-06T22:25:26.000Z\",\n  \"updatedAt\": \"2025-11-06T22:25:26.000Z\"\n}"
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "Obtener todos los clientes registrados",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/v1/clientes",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"clientes"
+											]
+										},
+										"description": "Obtener todos los clientes registrados en el sistema."
+									},
+									"response": [
+										{
+											"name": "Untitled Response",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/clientes",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"clientes"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"id\": 1,\n    \"documento\": \"1134854312\",\n    \"nombres\": \"Juan Pérez García\",\n    \"email\": \"juan.perez@example.com\",\n    \"celular\": \"3001234567\",\n    \"saldo\": \"0\",\n    \"createdAt\": \"2025-11-06T22:25:26.000Z\",\n    \"updatedAt\": \"2025-11-06T22:25:26.000Z\"\n  },\n  {\n    \"id\": 1,\n    \"documento\": \"1134854312\",\n    \"nombres\": \"Juan Pérez García\",\n    \"email\": \"juan.perez@example.com\",\n    \"celular\": \"3001234567\",\n    \"saldo\": \"0\",\n    \"createdAt\": \"2025-11-06T22:25:26.000Z\",\n    \"updatedAt\": \"2025-11-06T22:25:26.000Z\"\n  }\n]"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "billetera",
+							"item": [
+								{
+									"name": "recarga",
+									"item": [
+										{
+											"name": "Recargar saldo a la billetera",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"documento\": \"1134854312\",\n  \"celular\": \"3001234567\",\n  \"monto\": 50000\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/billetera/recarga",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"billetera",
+														"recarga"
+													]
+												},
+												"description": "Carga dinero a la billetera de un cliente. Requiere documento, celular y monto mayor a 0."
+											},
+											"response": [
+												{
+													"name": "Untitled Response",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"documento\": \"1134854312\",\n  \"celular\": \"3001234567\",\n  \"monto\": 50000\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/api/v1/billetera/recarga",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"billetera",
+																"recarga"
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"cliente\": {\n    \"documento\": \"1134854312\",\n    \"nombres\": \"Juan Pérez\"\n  },\n  \"montoRecargado\": 50000,\n  \"saldoAnterior\": \"100000\",\n  \"saldoNuevo\": \"150000\"\n}"
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "pagar",
+									"item": [
+										{
+											"name": "Iniciar proceso de pago",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"documento\": \"1134854312\",\n  \"celular\": \"3001234567\",\n  \"monto\": 25000\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/billetera/pagar",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"billetera",
+														"pagar"
+													]
+												},
+												"description": "Genera un token de 6 dígitos y lo envía al email del cliente. El token expira en 15 minutos y solo se puede usar una vez."
+											},
+											"response": [
+												{
+													"name": "Untitled Response",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"documento\": \"1134854312\",\n  \"celular\": \"3001234567\",\n  \"monto\": 25000\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/api/v1/billetera/pagar",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"billetera",
+																"pagar"
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"id_sesion\": \"ses_abc123xyz456\"\n}"
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "confirmar-pago",
+									"item": [
+										{
+											"name": "Confirmar pago con token",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"id_sesion\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"token\": \"/40561\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/billetera/confirmar-pago",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"billetera",
+														"confirmar-pago"
+													]
+												},
+												"description": "Confirma el pago usando el ID de sesión y el token recibido por email. Valida que no esté expirado ni usado, y descuenta el monto del saldo."
+											},
+											"response": [
+												{
+													"name": "Untitled Response",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"id_sesion\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"token\": \"/40561\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/api/v1/billetera/confirmar-pago",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"billetera",
+																"confirmar-pago"
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"cliente\": {\n    \"documento\": \"1134854312\",\n    \"nombres\": \"Juan Pérez\"\n  },\n  \"montoDescontado\": \"25000\",\n  \"saldoAnterior\": \"100000\",\n  \"saldoNuevo\": \"75000\",\n  \"fechaTransaccion\": \"2025-11-06T22:30:00.000Z\"\n}"
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "saldo",
+									"item": [
+										{
+											"name": "Consultar saldo de la billetera",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/v1/billetera/saldo?documento=1134854312&celular=3001234567",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"billetera",
+														"saldo"
+													],
+													"query": [
+														{
+															"key": "documento",
+															"value": "1134854312",
+															"description": "Número de documento del cliente"
+														},
+														{
+															"key": "celular",
+															"value": "3001234567",
+															"description": "Número de celular del cliente"
+														}
+													]
+												},
+												"description": "Consulta el saldo actual de un cliente e incluye estadísticas de transacciones (recargas y compras)."
+											},
+											"response": [
+												{
+													"name": "Untitled Response",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/v1/billetera/saldo?documento=1134854312&celular=3001234567",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"v1",
+																"billetera",
+																"saldo"
+															],
+															"query": [
+																{
+																	"key": "documento",
+																	"value": "1134854312",
+																	"description": "Número de documento del cliente"
+																},
+																{
+																	"key": "celular",
+																	"value": "3001234567",
+																	"description": "Número de celular del cliente"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "json",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "application/json"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"cliente\": {\n    \"documento\": \"1134854312\",\n    \"nombres\": \"Juan Pérez\",\n    \"email\": \"ju**@em***.com\"\n  },\n  \"saldo\": \"300000\",\n  \"estadisticas\": {\n    \"totalRecargas\": \"500000\",\n    \"totalCompras\": \"200000\",\n    \"numeroRecargas\": 10,\n    \"numeroCompras\": 5\n  },\n  \"fechaConsulta\": \"2025-11-06T22:30:00.000Z\"\n}"
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "client-api-key-2025",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3001"
+		}
+	]
+}

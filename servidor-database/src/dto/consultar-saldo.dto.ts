@@ -6,7 +6,7 @@ import { IsDocumentoColombia } from "../validators/documento-colombia.validator"
 export class ConsultarSaldoDto {
   @ApiProperty({
     description: "Número de documento de identidad del cliente (cédula colombiana)",
-    example: "1234567890"
+    example: "1134854312"
   })
   @IsString()
   @IsNotEmpty()

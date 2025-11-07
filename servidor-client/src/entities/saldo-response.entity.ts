@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 class ClienteSaldoEntity {
-  @ApiProperty({ example: '1234567890', description: 'Documento del cliente' })
+  @ApiProperty({ example: '1134854312', description: 'Documento del cliente' })
   documento: string;
 
   @ApiProperty({ example: 'Juan Pérez', description: 'Nombre del cliente' })

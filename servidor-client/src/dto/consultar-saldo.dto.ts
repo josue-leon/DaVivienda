@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class ConsultarSaldoDto {
   @ApiProperty({
     description: 'Documento de identidad del cliente',
-    example: '1234567890',
+    example: '1134854312',
   })
   @IsString()
   @IsNotEmpty()

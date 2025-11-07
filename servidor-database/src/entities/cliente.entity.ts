@@ -8,7 +8,7 @@ export class ClienteEntity implements ClienteResult {
   @ApiProperty({ example: 1, description: "ID único del cliente" })
   id: number
 
-  @ApiProperty({ example: "1234567890", description: "Documento de identidad del cliente" })
+  @ApiProperty({ example: "1134854312", description: "Documento de identidad del cliente" })
   documento: string
 
   @ApiProperty({ example: "Juan Pérez García", description: "Nombre completo del cliente" })

@@ -5,7 +5,7 @@ export class ClienteResponseEntity {
   id: number;
 
   @ApiProperty({
-    example: '1234567890',
+    example: '1134854312',
     description: 'Documento de identidad del cliente',
   })
   documento: string;
