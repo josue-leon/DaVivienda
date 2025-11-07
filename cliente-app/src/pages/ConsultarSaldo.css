@@ -1,0 +1,86 @@
+.saldo-resultado {
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 2px solid #e5e7eb;
+}
+
+.saldo-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.saldo-nombre {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.saldo-documento {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.saldo-monto {
+  background: linear-gradient(135deg, #C8102E 0%, #a00d25 100%);
+  padding: 32px;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.saldo-label {
+  display: block;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.saldo-valor {
+  display: block;
+  font-size: 48px;
+  font-weight: 800;
+  color: white;
+}
+
+.saldo-estadisticas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.estadistica {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.estadistica-label {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.estadistica-valor {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+@media (max-width: 768px) {
+  .saldo-valor {
+    font-size: 36px;
+  }
+
+  .saldo-estadisticas {
+    grid-template-columns: 1fr;
+  }
+}
