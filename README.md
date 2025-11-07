@@ -32,45 +32,78 @@ docker-compose down -v
 
 ## Inicio Manual (Sin Docker)
 
-### 1. Iniciar MySQL
+### 1. Configurar Variables de Entorno
+
+Renombrar `.env.example` a `.env` en cada proyecto y configurar la conexión en un **MySQL real**:
+
+**servidor-database/.env**
 ```bash
-cd servidor-database
-docker-compose up -d
+# Conexión a MySQL local (NO Docker)
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=db_usuario
+DB_PASSWORD=db_password
+DB_DATABASE_NAME=billetera_virtual
 ```
 
-### 2. Ejecutar Migraciones
+**servidor-client/.env**
 ```bash
-cd servidor-database
-npx prisma migrate deploy
+DATABASE_SERVER_URL=http://localhost:3000
+DATABASE_SERVER_API_KEY=super-secret-api-key-change-in-production-123456
 ```
 
-### 3. Instalar Dependencias
+**cliente-app/.env**
 ```bash
+VITE_API_BASE_URL=http://localhost:3001
+VITE_API_KEY=client-api-key-2025
+```
+
+### 2. Instalar Dependencias
+
+```bash
+# Servidor Database
 cd servidor-database
 pnpm i
 
+# Servidor Client
 cd ../servidor-client
 pnpm i
 
+# Cliente App
 cd ../cliente-app
 pnpm i
 ```
 
+### 3. Crear Base de Datos y Ejecutar Migraciones
+
+```bash
+cd servidor-database
+
+# Crear la base de datos (si no existe)
+# Conectarse a MySQL y ejecutar:
+# CREATE DATABASE billetera_virtual;
+
+# Ejecutar migraciones
+npx prisma migrate deploy
+```
+
 ### 4. Iniciar Servidores
 
-**Servidor Database (Puerto 3000)**
+Abrir **3 terminales diferentes** y ejecutar:
+
+**Terminal 1 - Servidor Database (Puerto 3000)**
 ```bash
 cd servidor-database
 pnpm start:dev
 ```
 
-**Servidor Client (Puerto 3001)**
+**Terminal 2 - Servidor Client (Puerto 3001)**
 ```bash
 cd servidor-client
 pnpm start:dev
 ```
 
-**Cliente App (Puerto 5173)**
+**Terminal 3 - Cliente App (Puerto 5173)**
 ```bash
 cd cliente-app
 pnpm dev
