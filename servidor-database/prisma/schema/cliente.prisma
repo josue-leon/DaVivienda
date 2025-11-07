@@ -1,0 +1,19 @@
+model Cliente {
+  id        Int      @id @default(autoincrement())
+  documento String   @unique @db.VarChar(20)
+  nombres   String   @db.VarChar(200)
+  email     String   @unique @db.VarChar(200)
+  celular   String   @db.VarChar(20)
+  saldo     Decimal  @default(0) @db.Decimal(15, 2)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  // Relaciones
+  transacciones  Transaccion[]
+  sesionesCompra SesionCompra[]
+
+  @@index([documento])
+  @@index([email])
+  @@index([documento, celular])
+  @@map("clientes")
+}

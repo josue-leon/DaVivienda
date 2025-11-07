@@ -1,0 +1,18 @@
+model SesionCompra {
+  id        String   @id @default(uuid())
+  clienteId Int      @map("cliente_id")
+  monto     Decimal  @db.Decimal(15, 2)
+  token     String   @db.Char(6)
+  usado     Boolean  @default(false)
+  expiraEn  DateTime @map("expira_en") @db.Timestamp(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+
+  // Relaciones
+  cliente Cliente @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+
+  @@index([id, token])
+  @@index([clienteId])
+  @@index([usado])
+  @@index([expiraEn])
+  @@map("sesiones_compra")
+}

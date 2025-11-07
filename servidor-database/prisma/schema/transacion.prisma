@@ -1,0 +1,21 @@
+model Transaccion {
+  id          Int             @id @default(autoincrement())
+  clienteId   Int             @map("cliente_id")
+  tipo        TipoTransaccion // RECARGA o COMPRA
+  monto       Decimal         @db.Decimal(15, 2)
+  descripcion String?         @db.Text
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamp(6)
+
+  // Relaciones
+  cliente Cliente @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+
+  @@index([clienteId])
+  @@index([tipo])
+  @@index([createdAt])
+  @@map("transacciones")
+}
+
+enum TipoTransaccion {
+  RECARGA
+  COMPRA
+}
