@@ -84,6 +84,7 @@ cd servidor-database
 # CREATE DATABASE billetera_virtual;
 
 # Ejecutar migraciones
+npx prisma migrate reset
 npx prisma migrate deploy
 ```
 
